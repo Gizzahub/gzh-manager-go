@@ -14,4 +14,5 @@ pip, npm, go, rubygem 업데이트시 새로설치 귀찮음
 ## 환경별 도커설정 등
 등
 
-
+## 네트워크에 따라
+vpn, dns, proxy, host 등 변경
