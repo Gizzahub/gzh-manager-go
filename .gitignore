@@ -3,3 +3,8 @@
 
 # build
 build/
+
+# dependencies
+node_modules/
+vendor/
+dist/
