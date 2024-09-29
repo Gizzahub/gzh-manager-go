@@ -5,10 +5,10 @@ set -euo pipefail
 read -rp "GitHub Username: " user
 read -rp "Projectname: " projectname
 
-git clone git@github.com:FalcoSuessgott/golang-cli-template.git "$projectname"
+git clone git@github.com:Gizzahub/gzh-manager-go.git "$projectname"
 cd "$projectname"
 rm -rf .git
-find . -type f -exec sed -i "s/golang-cli-template/$projectname/g" {} +
+find . -type f -exec sed -i "s/gzh-manager/$projectname/g" {} +
 find . -type f -exec sed -i "s/[Ff]alco[Ss]uessgott/$user/g" {} +
 git init
 git add .

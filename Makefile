@@ -1,4 +1,4 @@
-projectname?=golang-cli-template
+projectname?=gzh-manager
 
 default: help
 

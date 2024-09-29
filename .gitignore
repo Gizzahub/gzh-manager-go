@@ -3,6 +3,7 @@
 
 # build
 build/
+/gzh-manager
 
 # dependencies
 node_modules/

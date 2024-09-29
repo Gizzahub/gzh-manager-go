@@ -1,4 +1,4 @@
-# golang-cli-template
+# gzh-manager-go
 
 <div align="center">
 A general purpose project template for golang CLI applications
@@ -10,15 +10,15 @@ This template serves as a starting point for golang commandline applications it 
 <img src="https://github.com/gizzahub/gzh-manager-go/actions/workflows/test.yml/badge.svg" alt="drawing"/>
 <img src="https://github.com/gizzahub/gzh-manager-go/actions/workflows/lint.yml/badge.svg" alt="drawing"/>
 <img src="https://pkg.go.dev/badge/github.com/gizzahub/gzh-manager-go.svg" alt="drawing"/>
-<img src="https://codecov.io/gh/FalcoSuessgott/golang-cli-template/branch/main/graph/badge.svg" alt="drawing"/>
-<img src="https://img.shields.io/github/v/release/FalcoSuessgott/golang-cli-template" alt="drawing"/>
-<img src="https://img.shields.io/docker/pulls/falcosuessgott/golang-cli-template" alt="drawing"/>
-<img src="https://img.shields.io/github/downloads/FalcoSuessgott/golang-cli-template/total.svg" alt="drawing"/>
+<img src="https://codecov.io/gh/Gizzahub/gzh-manager-go/branch/main/graph/badge.svg" alt="drawing"/>
+<img src="https://img.shields.io/github/v/release/Gizzahub/gzh-manager-go" alt="drawing"/>
+<img src="https://img.shields.io/docker/pulls/Gizzahub/gzh-manager-go" alt="drawing"/>
+<img src="https://img.shields.io/github/downloads/Gizzahub/gzh-manager-go/total.svg" alt="drawing"/>
 </div>
 
 # Table of Contents
 <!--ts-->
-   * [golang-cli-template](#golang-cli-template)
+   * [gzh-manager-go](#gzh-manager-go)
    * [Features](#features)
    * [Project Layout](#project-layout)
    * [How to use this template](#how-to-use-this-template)
@@ -37,7 +37,7 @@ This template serves as a starting point for golang commandline applications it 
 - [Gitlab CI](.gitlab-ci.yml) Configuration (Lint, Test, Build, Release)
 - [cobra](https://cobra.dev/) example setup including tests
 - [Makefile](Makefile) - with various useful targets and documentation (see Makefile Targets)
-- [Github Pages](_config.yml) using [jekyll-theme-minimal](https://github.com/pages-themes/minimal) (checkout [https://falcosuessgott.github.io/golang-cli-template/](https://falcosuessgott.github.io/golang-cli-template/))
+- [Github Pages](_config.yml) using [jekyll-theme-minimal](https://github.com/pages-themes/minimal) (checkout [https://Gizzahub.github.io/gzh-manager-go/](https://Gizzahub.github.io/gzh-manager-go/))
 - Useful `README.md` badges
 - [pre-commit-hooks](https://pre-commit.com/) for formatting and validating code before committing
 
@@ -51,9 +51,7 @@ This template serves as a starting point for golang commandline applications it 
 - [`scripts/`](scripts/) => build scripts 
 
 # How to use this template
-```sh
-bash <(curl -s https://raw.githubusercontent.com/FalcoSuessgott/golang-cli-template/master/install.sh)
-```
+```sh```
 
 In order to make the CI work you will need to have the following Secrets in your repository defined:
 
@@ -62,30 +60,30 @@ Repository  -> Settings -> Secrets & variables -> `CODECOV_TOKEN`, `DOCKERHUB_TO
 # Demo Application
 
 ```sh
-$> golang-cli-template -h
-golang-cli project template demo application
+$> gzh-manager -h
+golang-cli cli application by managing gzh-manager
 
 Usage:
-  golang-cli-template [flags]
-  golang-cli-template [command]
+  gzh-manager [flags]
+  gzh-manager [command]
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
   example     example subcommand which adds or multiplies two given integers
   help        Help about any command
-  version     golang-cli-template version
+  version     gzh-manager version
 
 Flags:
-  -h, --help   help for golang-cli-template
+  -h, --help   help for gzh-manager
 
-Use "golang-cli-template [command] --help" for more information about a command.
+Use "gzh-manager [command] --help" for more information about a command.
 ```
 
 ```sh
-$> golang-cli-template example 2 5 --add
+$> gzh-manager example 2 5 --add
 7
 
-$> golang-cli-template example 2 5 --multiply
+$> gzh-manager example 2 5 --multiply
 10
 ```
 

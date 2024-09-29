@@ -1,3 +1,3 @@
 FROM alpine:3.20
-COPY golang-cli-template /usr/bin/golang-cli-template
-ENTRYPOINT ["/usr/bin/golang-cli-template"]
+COPY gzh-manager /usr/bin/gzh-manager
+ENTRYPOINT ["/usr/bin/gzh-manager"]
