@@ -1,5 +1,9 @@
 # TODO
 
+## 중요!!
+테스트 할 때 Gizzahub에다 하지 않기 ^^
+동작 잘 하는거 확인했다 ^^b all
+
 ## Git
 - 컴퓨터 부팅될 때 git pull 또는 reset
 - gituhb org clone
