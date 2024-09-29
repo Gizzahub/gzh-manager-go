@@ -1,6 +1,7 @@
 package github_org
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -60,7 +61,7 @@ func List(org string) ([]string, error) {
 	return repoNames, nil
 }
 
-func Clone(org string, repo string, branch string) error {
+func Clone(targetPath string, org string, repo string, branch string) error {
 	if branch == "" {
 		defaultBranch, err := GetDefaultBranch(org, repo)
 		if err != nil {
@@ -70,9 +71,16 @@ func Clone(org string, repo string, branch string) error {
 	}
 
 	cloneURL := fmt.Sprintf("https://github.com/%s/%s.git", org, repo)
-	cmd := exec.Command("git", "clone", "-b", branch, cloneURL)
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	//cmd := exec.Command("git", "clone", "-b", branch, cloneURL, targetPath)
+	cmd := exec.Command("git", "clone", cloneURL, targetPath)
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
 	if err := cmd.Run(); err != nil {
-		return fmt.Errorf("failed to clone repository: %w", err)
+		fmt.Println(stderr.String())
+		fmt.Println(out.String())
+		return fmt.Errorf("Clone Failed  (url: %s, branch: %s, targetPath: %s, err: %w)\n", cloneURL, branch, targetPath, err)
 	}
 
 	return nil
@@ -99,7 +107,7 @@ func RefreshAll(targetPath string, org string) error {
 	for _, repo := range reposToDelete {
 		repoPath := filepath.Join(targetPath, repo)
 		if err := os.RemoveAll(repoPath); err != nil {
-			return fmt.Errorf("failed to delete repository %s: %w", repo, err)
+			return fmt.Errorf("failed to delete repository %s: %w", repoPath, err)
 		}
 	}
 
@@ -108,15 +116,17 @@ func RefreshAll(targetPath string, org string) error {
 		repoPath := filepath.Join(targetPath, repo)
 		if _, err := os.Stat(repoPath); os.IsNotExist(err) {
 			// Clone the repository if it does not exist
-			if err := Clone(org, repo, ""); err != nil {
-				return fmt.Errorf("failed to clone repository %s: %w", repo, err)
+			if err := Clone(repoPath, org, repo, ""); err != nil {
+				//fmt.Printf("failed to clone repository %s: %w\n", repoPath, err)
+				return fmt.Errorf("failed to clone repository %s: %w", repoPath, err)
 			}
 		} else {
 			// Reset hard HEAD if the repository already exists
 			cmd := exec.Command("git", "-C", repoPath, "reset", "--hard", "HEAD")
 			if err := cmd.Run(); err != nil {
-				return fmt.Errorf("failed to reset repository %s: %w", repo, err)
+				return fmt.Errorf("failed to reset repository %s: %w", repoPath, err)
 			}
+			fmt.Printf("Repo Clone or Reset Success: %s\n", repoPath)
 		}
 	}
 
