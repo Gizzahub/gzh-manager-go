@@ -2,9 +2,10 @@
 
 ## Git
 - 컴퓨터 부팅될 때 git pull 또는 reset
-- gituhb org pull
+- gituhb org clone
 - os별로 받을거 안받을거 설정
 - directory alias??
+- gitlab group clone
 
 ## Lib
 - 패키지관리자 asdf처럼?? 하지마??
