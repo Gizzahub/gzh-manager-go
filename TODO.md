@@ -2,14 +2,21 @@
 
 ## 중요!!
 테스트 할 때 Gizzahub에다 하지 않기 ^^
-동작 잘 하는거 확인했다 ^^b all
+동작 잘 하는거 확인했다 ^^bal
 
-## Git
-- 컴퓨터 부팅될 때 git pull 또는 reset
-- gituhb org clone
-- os별로 받을거 안받을거 설정
-- directory alias??
-- gitlab group clone
+## Github Org
+- [ ] 컴퓨터 부팅될 때 git pull 또는 reset
+- [x] gituhb org clone
+- [ ] os별로 받을거 안받을거 설정
+- [ ] git pull, reset
+- [ ] git 
+- [ ] directory alias??
+- [ ] ssh, https 설정
+- [ ] 설정파일 활용 repos.yml 파일을 orgRootPath 에 넣어줄까
+- [ ] repos.yaml 스키마
+
+## Gitlab Org
+- [ ] gitlab group clone
 
 ## Lib
 - 패키지관리자 asdf처럼?? 하지마??
