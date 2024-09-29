@@ -7,9 +7,9 @@ A general purpose project template for golang CLI applications
 This template serves as a starting point for golang commandline applications it is based on golang projects that I consider high quality and various other useful blog posts that helped me understanding golang better.
 <br>
 <br>
-<img src="https://github.com/FalcoSuessgott/golang-cli-template/actions/workflows/test.yml/badge.svg" alt="drawing"/>
-<img src="https://github.com/FalcoSuessgott/golang-cli-template/actions/workflows/lint.yml/badge.svg" alt="drawing"/>
-<img src="https://pkg.go.dev/badge/github.com/FalcoSuessgott/golang-cli-template.svg" alt="drawing"/>
+<img src="https://github.com/gizzahub/gzh-manager-go/actions/workflows/test.yml/badge.svg" alt="drawing"/>
+<img src="https://github.com/gizzahub/gzh-manager-go/actions/workflows/lint.yml/badge.svg" alt="drawing"/>
+<img src="https://pkg.go.dev/badge/github.com/gizzahub/gzh-manager-go.svg" alt="drawing"/>
 <img src="https://codecov.io/gh/FalcoSuessgott/golang-cli-template/branch/main/graph/badge.svg" alt="drawing"/>
 <img src="https://img.shields.io/github/v/release/FalcoSuessgott/golang-cli-template" alt="drawing"/>
 <img src="https://img.shields.io/docker/pulls/falcosuessgott/golang-cli-template" alt="drawing"/>
@@ -42,10 +42,10 @@ This template serves as a starting point for golang commandline applications it 
 - [pre-commit-hooks](https://pre-commit.com/) for formatting and validating code before committing
 
 # Project Layout
-* [assets/](https://pkg.go.dev/github.com/FalcoSuessgott/golang-cli-template/assets) => docs, images, etc
-* [cmd/](https://pkg.go.dev/github.com/FalcoSuessgott/golang-cli-template/cmd)  => commandline configurartions (flags, subcommands)
-* [pkg/](https://pkg.go.dev/github.com/FalcoSuessgott/golang-cli-template/pkg)  => packages that are okay to import for other projects
-* [internal/](https://pkg.go.dev/github.com/FalcoSuessgott/golang-cli-template/pkg)  => packages that are only for project internal purposes
+* [assets/](https://pkg.go.dev/github.com/gizzahub/gzh-manager-go/assets) => docs, images, etc
+* [cmd/](https://pkg.go.dev/github.com/gizzahub/gzh-manager-go/cmd)  => commandline configurartions (flags, subcommands)
+* [pkg/](https://pkg.go.dev/github.com/gizzahub/gzh-manager-go/pkg)  => packages that are okay to import for other projects
+* [internal/](https://pkg.go.dev/github.com/gizzahub/gzh-manager-go/pkg)  => packages that are only for project internal purposes
 - [`tools/`](tools/) => for automatically shipping all required dependencies when running `go get` (or `make bootstrap`) such as `golang-ci-lint` (see: https://github.com/golang/go/wiki/Modules#how-can-i-track-tool-dependencies-for-a-module)
 )
 - [`scripts/`](scripts/) => build scripts 

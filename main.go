@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/FalcoSuessgott/golang-cli-template/cmd"
+	"github.com/gizzahub/gzh-manager-go/cmd"
 )
 
 var version = ""

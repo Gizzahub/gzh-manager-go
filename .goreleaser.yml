@@ -34,7 +34,7 @@ nfpms:
   - builds:
       - golang-cli-template
     vendor: FalcoSuessgott
-    homepage:  https://github.com/FalcoSuessgott/golang-cli-template
+    homepage:  https://github.com/gizzahub/gzh-manager-go
     maintainer: "Tom Morelly <tommorelly@gmail.com>"
     description: "A general purpose golang CLI template for Github and Gitlab"
     license: GPL-3.0
