@@ -7,21 +7,21 @@ import (
 	"github.com/spf13/cobra"
 )
 
-type githubRepoOptions struct {
+type githubOrgOptions struct {
 	targetPath string
 	orgName    string
 }
 
-func defaultGithubRepoOptions() *githubRepoOptions {
-	return &githubRepoOptions{}
+func defaultGithubOrgOptions() *githubOrgOptions {
+	return &githubOrgOptions{}
 }
 
-func newGithubRepoCmd() *cobra.Command {
-	o := defaultGithubRepoOptions()
+func newGithubOrgCmd() *cobra.Command {
+	o := defaultGithubOrgOptions()
 
 	cmd := &cobra.Command{
 		Use:          "githubOrg",
-		Short:        "githubOrg subcommand to manage GitHub repositories",
+		Short:        "githubOrg subcommand to manage GitHub org repositories",
 		SilenceUsage: true,
 	}
 
@@ -39,7 +39,7 @@ func newGithubRepoCmd() *cobra.Command {
 	return cmd
 }
 
-func (o *githubRepoOptions) runClone(cmd *cobra.Command, args []string) error {
+func (o *githubOrgOptions) runClone(cmd *cobra.Command, args []string) error {
 	if o.targetPath == "" || o.orgName == "" {
 		return fmt.Errorf("both targetPath and orgName must be specified")
 	}
