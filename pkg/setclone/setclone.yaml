@@ -1,0 +1,10 @@
+# official if null
+gitlab_url: https://gitlab.com
+#github_token: null
+
+default: ssh
+# http. token?
+
+ignore_names:
+  - "proxynd"
+  - "proxynd-configmap"
