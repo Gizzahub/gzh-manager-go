@@ -9,10 +9,10 @@ import (
 )
 
 type setcloneConfig struct {
-	GithubUrl         string   `yaml:"github_url"`
-	GithubToken       string   `yaml:"github_token"`
-	DefaultProtocol   string   `yaml:"default_protocol"`
-	IgnoreNameRegexes []string `yaml:"ignore_names"`
+	GithubUrl       string   `yaml:"github_url"`
+	GithubToken     string   `yaml:"github_token"`
+	DefaultProtocol string   `yaml:"default_protocol"`
+	IgnoreNames     []string `yaml:"ignore_names"`
 }
 
 // getConfigDir returns the configuration directory path

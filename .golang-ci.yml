@@ -2,26 +2,43 @@ linters-settings:
   lll:
     line-length: 180
 linters:
-  enable-all: true
+  # disable-all: true
+  # Uncomment to enable all linters
+  # enable-all: true
+  # disabling linters that are abandoned or replaced with better versions
   disable:
+#    - golint
+#    - deadcode
+#    - exhaustivestruct
+#    - ifshort
+#    - interfacer
+#    - maligned
+#    - nosnakecase
+#    - scopelint
+#    - structcheck
+#    - varcheck
     - testpackage
     - forbidigo
     - paralleltest
-    - exhaustivestruct
     - varnamelen
-    - interfacer
-    - maligned
-    - scopelint
-    - golint
-    - varcheck
-    - nosnakecase
-    - deadcode
-    - ifshort
-    - structcheck
     - rowserrcheck
     - sqlclosecheck
-    - structcheck
     - wastedassign
     - exhaustruct
     - nolintlint
     - wrapcheck
+  # additional non-default linters that we want to use
+  enable:
+    - gochecknoglobals
+    - gocritic
+    - goconst
+    - godox
+    - err113
+    - gofmt
+    - gosec
+    - misspell
+    - revive
+    - funlen
+    - ireturn
+    - lll
+    - nonamedreturns

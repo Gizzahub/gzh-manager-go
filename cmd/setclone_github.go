@@ -31,7 +31,7 @@ func newSetcloneGithubCmd() *cobra.Command {
 	return cmd
 }
 
-func (o *setcloneGithubOptions) run(cmd *cobra.Command, args []string) error {
+func (o *setcloneGithubOptions) run(_ *cobra.Command, args []string) error {
 	if o.targetPath == "" || o.orgName == "" {
 		return fmt.Errorf("both targetPath and orgName must be specified")
 	}

@@ -114,5 +114,5 @@ test                           display test coverage
 If you find issues in that setup or have some nice features / improvements, I would welcome an issue or a PR :)
 
 # 기록용
-템플릿을 .. `https://github.com/FalcoSuessgott/golang-cli-template`를 썼는데....  `https://github.com/create-go-app/cli`가 더 좋은듯? 심플해서..
+템플릿을 .. `https://github.com/FalcoSuessgott/golang-cli-template` 를 썼는데.... `https://github.com/create-go-app/cli` 가 더 좋은듯? 심플해서..
 뭔가 복잡해졌다. 

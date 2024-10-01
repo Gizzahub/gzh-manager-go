@@ -4,6 +4,7 @@
 # build
 build/
 /gzh-manager
+/gzh
 
 # dependencies
 node_modules/

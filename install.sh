@@ -8,8 +8,8 @@ read -rp "Projectname: " projectname
 git clone git@github.com:Gizzahub/gzh-manager-go.git "$projectname"
 cd "$projectname"
 rm -rf .git
-find . -type f -exec sed -i "s/gzh-manager/$projectname/g" {} +
-find . -type f -exec sed -i "s/[Ff]alco[Ss]uessgott/$user/g" {} +
+find . -type f -exec sed -i "s/gzh-manager-go/$projectname/g" {} +
+find . -type f -exec sed -i "s/[Gg]izzahub/$user/g" {} +
 git init
 git add .
 git commit -m "initial commit"

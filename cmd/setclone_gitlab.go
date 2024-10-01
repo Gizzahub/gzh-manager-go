@@ -33,7 +33,7 @@ func newSetcloneGitlabCmd() *cobra.Command {
 	return cmd
 }
 
-func (o *setcloneGitlabOptions) run(cmd *cobra.Command, args []string) error {
+func (o *setcloneGitlabOptions) run(_ *cobra.Command, args []string) error {
 	if o.targetPath == "" || o.groupName == "" {
 		return fmt.Errorf("both targetPath and groupName must be specified")
 	}

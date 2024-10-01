@@ -1,4 +1,5 @@
 projectname?=gzh-manager
+executablename?=gzh-manager
 
 default: help
 
@@ -8,7 +9,7 @@ help: ## list makefile targets
 
 .PHONY: build
 build: ## build golang binary
-	@go build -ldflags "-X main.version=$(shell git describe --abbrev=0 --tags)" -o $(projectname)
+	@go build -ldflags "-X main.version=$(shell git describe --abbrev=0 --tags)" -o $(executablename)
 
 .PHONY: install
 install: ## install golang binary
@@ -29,7 +30,7 @@ test: clean ## display test coverage
 	
 PHONY: clean
 clean: ## clean up environment
-	@rm -rf coverage.out dist/ $(projectname)
+	@rm -rf coverage.out dist/ $(executablename)
 
 PHONY: cover
 cover: ## display test coverage
