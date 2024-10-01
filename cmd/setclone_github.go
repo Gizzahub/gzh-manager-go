@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	githubpkg "github.com/gizzahub/gzh-manager-go/pkg/github"
+	"github.com/gizzahub/gzh-manager-go/pkg/github"
 	"github.com/spf13/cobra"
 )
 
@@ -36,7 +36,7 @@ func (o *setcloneGithubOptions) run(_ *cobra.Command, args []string) error {
 		return fmt.Errorf("both targetPath and orgName must be specified")
 	}
 
-	err := githubpkg.RefreshAll(o.targetPath, o.orgName)
+	err := github.RefreshAll(o.targetPath, o.orgName)
 	if err != nil {
 		return err
 	}
