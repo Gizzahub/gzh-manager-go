@@ -47,3 +47,8 @@ linters:
     - ireturn
     - lll
     - nonamedreturns
+    - staticcheck
+    - ineffassign
+    - govet
+    - gosimple
+    - errcheck

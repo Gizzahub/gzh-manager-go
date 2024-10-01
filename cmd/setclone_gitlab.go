@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/gizzahub/gzh-manager-go/pkg/gitlab"
+	gitlabpkg "github.com/gizzahub/gzh-manager-go/pkg/gitlab"
 	"github.com/spf13/cobra"
 )
 
@@ -38,7 +38,7 @@ func (o *setcloneGitlabOptions) run(_ *cobra.Command, args []string) error {
 		return fmt.Errorf("both targetPath and groupName must be specified")
 	}
 
-	err := gitlab.RefreshAll(o.targetPath, o.groupName)
+	err := gitlabpkg.RefreshAll(o.targetPath, o.groupName)
 	if err != nil {
 		return err
 	}

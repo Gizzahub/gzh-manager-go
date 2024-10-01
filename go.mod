@@ -5,6 +5,7 @@ go 1.23
 require (
 	github.com/daixiang0/gci v0.13.5
 	github.com/go-critic/go-critic v0.11.4
+	github.com/go-playground/validator/v10 v10.22.1
 	github.com/golangci/golangci-lint v1.61.0
 	github.com/gotesttools/gotestfmt/v2 v2.5.0
 	github.com/muesli/mango-cobra v1.2.0
@@ -13,6 +14,8 @@ require (
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/lint v0.0.0-20210508222113-6edffad5e616
 	golang.org/x/tools v0.25.0
+	gopkg.in/yaml.v2 v2.4.0
+	gopkg.in/yaml.v3 v3.0.1
 	mvdan.cc/gofumpt v0.7.0
 )
 
@@ -60,11 +63,10 @@ require (
 	github.com/firefart/nonamedreturns v1.0.5 // indirect
 	github.com/fsnotify/fsnotify v1.5.4 // indirect
 	github.com/fzipp/gocyclo v0.6.0 // indirect
-	github.com/gabriel-vasile/mimetype v1.4.3 // indirect
+	github.com/gabriel-vasile/mimetype v1.4.5 // indirect
 	github.com/ghostiam/protogetter v0.3.6 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.22.1 // indirect
 	github.com/go-toolsmith/astcast v1.1.0 // indirect
 	github.com/go-toolsmith/astcopy v1.1.0 // indirect
 	github.com/go-toolsmith/astequal v1.2.0 // indirect
@@ -197,8 +199,6 @@ require (
 	golang.org/x/text v0.18.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.1 // indirect
 	honnef.co/go/tools v0.5.1 // indirect
 	mvdan.cc/unparam v0.0.0-20240528143540-8a5130ca722f // indirect
 )
