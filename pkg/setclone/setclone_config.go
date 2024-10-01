@@ -1,13 +1,23 @@
 package setclone
 
 import (
-	"gopkg.in/yaml.v3"
+	"fmt"
 	"log"
 	"os"
 	"path"
+
+	"github.com/go-playground/validator/v10"
+	"gopkg.in/yaml.v3"
 )
 
-type SetcloneGithub struct {
+// >>>>>>>>>> default >>>>>>>>>>
+type SetcloneDefault struct {
+	Protocol string                `yaml:"protocol" validate:"required,oneof=http https ssh"`
+	Github   SetcloneDefaultGithub `yaml:"github"`
+	Gitlab   SetcloneDefaultGitlab `yaml:"gitlab"`
+}
+
+type SetcloneDefaultGithub struct {
 	RootPath string `yaml:"root_path"`
 	Provider string `yaml:"provider"`
 	url      string `yaml:"url"`
@@ -15,19 +25,32 @@ type SetcloneGithub struct {
 	OrgName  string `yaml:"org_name"`
 }
 
-type SetcloneGitlab struct {
+type SetcloneDefaultGitlab struct {
 	RootPath  string `yaml:"root_path"`
 	Provider  string `yaml:"provider"`
 	Url       string `yaml:"url"`
 	Recursive bool   `yaml:"recursive"`
-	GroupName string `yaml:"group_name"`
 	Protocol  string `yaml:"protocol"`
+	GroupName string `yaml:"group_name"`
 }
 
-type SetcloneDefault struct {
-	Protocol string         `yaml:"protocol"`
-	Github   SetcloneGithub `yaml:"github"`
-	Gitlab   SetcloneGitlab `yaml:"gitlab"`
+// <<<<<<<<<< default <<<<<<<<<<
+
+type SetcloneGithub struct {
+	RootPath string `yaml:"root_path" validate:"required"`
+	Provider string `yaml:"provider" validate:"required"`
+	url      string `yaml:"url"`
+	Protocol string `yaml:"protocol" validate:"required,oneof=http https ssh"`
+	OrgName  string `yaml:"org_name" validate:"required"`
+}
+
+type SetcloneGitlab struct {
+	RootPath  string `yaml:"root_path" validate:"required"`
+	Provider  string `yaml:"provider" validate:"required"`
+	Url       string `yaml:"url"`
+	Recursive bool   `yaml:"recursive"`
+	Protocol  string `yaml:"protocol" validate:"required,oneof=http https ssh"`
+	GroupName string `yaml:"group_name" binding:"required"`
 }
 
 type setcloneConfig struct {
@@ -58,4 +81,47 @@ func (cfg *setcloneConfig) ReadConfig(targetPath string) {
 	if err != nil {
 		log.Fatalf("failed to unmarshal config file: %v", err)
 	}
+
+	err = cfg.validateConfig()
+	if err != nil {
+		printValidationErrors(err)
+		log.Fatalf("failed to validate config file: %v", err)
+	}
+}
+
+// 커스텀 오류 메시지 맵
+var errorMessages = map[string]string{
+	"required": "필수 필드입니다.",
+	"url":      "유효한 URL을 입력해야 합니다.",
+	"oneof":    "허용되는 값이 아닙니다 (http, https, ssh).",
+}
+
+// 유효성 검사 오류 상세 메시지 출력 함수
+func printValidationErrors(err error) {
+	if errs, ok := err.(validator.ValidationErrors); ok {
+		for _, e := range errs {
+			// 기본 메시지
+			msg, exists := errorMessages[e.Tag()]
+			if !exists {
+				msg = fmt.Sprintf("필드 '%s'은(는) '%s' 규칙을 만족해야 합니다.", e.Field(), e.Tag())
+			}
+
+			// 추가 정보가 필요한 경우 (예: oneof)
+			if e.Tag() == "oneof" {
+				msg = fmt.Sprintf("필드 '%s'은(는) 허용되는 값 중 하나여야 합니다: %s.", e.Field(), e.Param())
+			}
+
+			fmt.Printf("오류: %s\n", msg)
+		}
+	} else {
+		// validator 패키지 외의 오류 처리
+		fmt.Printf("오류: %v\n", err)
+	}
+}
+
+// 유효성 검사 함수
+func (cfg *setcloneConfig) validateConfig() error {
+	validate := validator.New(validator.WithRequiredStructEnabled())
+	// validate := validator.New()
+	return validate.Struct(cfg)
 }
