@@ -7,17 +7,34 @@ import (
 	"path"
 )
 
-type setcloneConfig struct {
-	GithubUrl         string   `yaml:"github_url"`
-	GithubToken       string   `yaml:"github_token"`
-	DefaultProtocol   string   `yaml:"default_protocol"`
-	IgnoreNameRegexes []string `yaml:"ignore_names"`
+type SetcloneGithub struct {
+	RootPath string `yaml:"root_path"`
+	Provider string `yaml:"provider"`
+	url      string `yaml:"url"`
+	Protocol string `yaml:"protocol"`
+	OrgName  string `yaml:"org_name"`
 }
 
-// Assuming these helper functions are defined within the same package
-func getConfigDir() string {
-	// Implement this function to return the configuration directory path
-	return "/path/to/config"
+type SetcloneGitlab struct {
+	RootPath  string `yaml:"root_path"`
+	Provider  string `yaml:"provider"`
+	Url       string `yaml:"url"`
+	Recursive bool   `yaml:"recursive"`
+	GroupName string `yaml:"group_name"`
+	Protocol  string `yaml:"protocol"`
+}
+
+type SetcloneDefault struct {
+	Protocol string         `yaml:"protocol"`
+	Github   SetcloneGithub `yaml:"github"`
+	Gitlab   SetcloneGitlab `yaml:"gitlab"`
+}
+
+type setcloneConfig struct {
+	Version           string           `yaml:"version"`
+	Default           SetcloneDefault  `yaml:"default"`
+	IgnoreNameRegexes []string         `yaml:"ignore_names"`
+	RepoRoots         []SetcloneGithub `yaml:"repo_roots"`
 }
 
 func fileExists(filePath string) bool {

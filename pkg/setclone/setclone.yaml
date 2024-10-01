@@ -1,10 +1,38 @@
-# official if null
-gitlab_url: https://gitlab.com
-#github_token: null
+version: 0.1
 
-default: ssh
+default:
+  protocol: ssh
+  github:
+    token: null
+  gitlab:
+    token: null
 # http. token?
 
-ignore_names:
-  - "proxynd"
-  - "proxynd-configmap"
+repo_roots:
+  - root_path: /home/$USER/mywork/scriptonbasestar
+    provider: github
+    token: null
+    org_name: scriptonbasestar
+    protocol: ssh
+    ignore_names:
+      - "proxynd"
+      - "proxynd-configmap"
+  - root_path: /home/$USER/mywork/jenkinsci
+    provider: github
+    token: null
+    org_name: jenkinsci
+    protocol: https
+  - root_path: /home/$USER/mywork/istio
+    provider: github
+    token: null
+    org_name: istio
+    protocol: https
+  - root_path: /home/$USER/mywork/inkscape
+    provider: gitlab
+    token: null
+    # default, 호스팅인 경우 별도 주소 설정
+    url: https://gitlab.com
+    recursive: true
+    group_name: inkscape
+    protocol: https
+

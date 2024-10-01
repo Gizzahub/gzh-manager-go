@@ -5,9 +5,9 @@
 동작 잘 하는거 확인했다 ^^bal
 
 ## Github Org
-- [ ] 컴퓨터 부팅될 때 git pull 또는 reset
+- [ ] 컴퓨터 부팅될 때 git pull 또는 reset - .profile
 - [x] gituhb org clone
-- [ ] os별로 받을거 안받을거 설정
+- [ ] os별로 받을거 안받을거 설정 - 설정파일
 - [ ] git pull, reset
 - [ ] git 
 - [ ] directory alias??
