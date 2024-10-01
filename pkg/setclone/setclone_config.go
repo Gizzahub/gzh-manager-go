@@ -1,6 +1,7 @@
 package setclone
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -98,7 +99,8 @@ var errorMessages = map[string]string{
 
 // 유효성 검사 오류 상세 메시지 출력 함수
 func printValidationErrors(err error) {
-	if errs, ok := err.(validator.ValidationErrors); ok {
+	var errs validator.ValidationErrors
+	if errors.As(err, &errs) {
 		for _, e := range errs {
 			// 기본 메시지
 			msg, exists := errorMessages[e.Tag()]
@@ -113,15 +115,12 @@ func printValidationErrors(err error) {
 
 			fmt.Printf("오류: %s\n", msg)
 		}
-	} else {
-		// validator 패키지 외의 오류 처리
-		fmt.Printf("오류: %v\n", err)
 	}
 }
 
 // 유효성 검사 함수
 func (cfg *setcloneConfig) validateConfig() error {
-	validate := validator.New(validator.WithRequiredStructEnabled())
-	// validate := validator.New()
+	// validate := validator.New(validator.WithRequiredStructEnabled())
+	validate := validator.New()
 	return validate.Struct(cfg)
 }

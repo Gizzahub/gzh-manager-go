@@ -1,6 +1,6 @@
 module github.com/gizzahub/gzh-manager-go
 
-go 1.23.1
+go 1.23
 
 require (
 	github.com/daixiang0/gci v0.13.5

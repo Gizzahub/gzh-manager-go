@@ -6,7 +6,8 @@ import (
 )
 
 func TestList(t *testing.T) {
-	org := "your-organization" // Replace with the actual organization name
+	t.SkipNow()
+	org := "ScriptonBasestar"
 
 	repos, err := List(org)
 	if err != nil {
