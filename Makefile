@@ -50,3 +50,8 @@ lint: ## lint go files
 pre-commit:	## run pre-commit hooks
 	pre-commit run --all-files
 
+.PHONY: deploy
+deploy:
+	# TODO ...
+	# $build and deploy
+	cp * .$(executablename)
