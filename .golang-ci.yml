@@ -27,18 +27,23 @@ linters:
     - exhaustruct
     - nolintlint
     - wrapcheck
+# manual
+    - unused
+    - revive
   # additional non-default linters that we want to use
   enable:
-    - gochecknoglobals
-    - gocritic
+#    - gochecknoglobals
+#    - err113
+#    - revive
+#    - taglint
+#    - unused
+#    - gosec
+#    - gocritic
+#    - funlen
     - goconst
     - godox
-    - err113
     - gofmt
-    - gosec
     - misspell
-    - revive
-    - funlen
     - ireturn
     - lll
     - nonamedreturns

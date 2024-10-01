@@ -3,6 +3,7 @@ package gitlab
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -10,6 +11,9 @@ import (
 	"os/exec"
 	"path/filepath"
 )
+
+var ErrFailedToGetSubgroups = errors.New("failed to get subgroups")
+var ErrFailedToGetRepositories = errors.New("failed to get repositories")
 
 type GitLabRepoInfo struct {
 	DefaultBranch string `json:"default_branch"`
@@ -24,7 +28,7 @@ func GetDefaultBranch(group string, repo string) (string, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("failed to get repository info: %s", resp.Status)
+		return "", fmt.Errorf("%w: %s", ErrFailedToGetRepositories, resp.Status)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -45,12 +49,12 @@ func listGroupRepos(group string, allRepos *[]string) error {
 	url := fmt.Sprintf("https://gitlab.com/api/v4/groups/%s/projects", group)
 	resp, err := http.Get(url)
 	if err != nil {
-		return fmt.Errorf("failed to get repositories: %w", err)
+		return fmt.Errorf("%w: %w", ErrFailedToGetRepositories, err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("failed to get repositories: %s", resp.Status)
+		return fmt.Errorf("%w: %s", ErrFailedToGetRepositories, resp.Status)
 	}
 
 	body, err := io.ReadAll(resp.Body)
@@ -74,12 +78,12 @@ func listGroupRepos(group string, allRepos *[]string) error {
 	subgroupsURL := fmt.Sprintf("https://gitlab.com/api/v4/groups/%s/subgroups", group)
 	subgroupsResp, err := http.Get(subgroupsURL)
 	if err != nil {
-		return fmt.Errorf("failed to get subgroups: %w", err)
+		return fmt.Errorf("%w: %w", ErrFailedToGetSubgroups, err)
 	}
 	defer subgroupsResp.Body.Close()
 
 	if subgroupsResp.StatusCode != http.StatusOK {
-		return fmt.Errorf("failed to get subgroups: %s", subgroupsResp.Status)
+		return fmt.Errorf("%w: %s", ErrFailedToGetSubgroups, subgroupsResp.Status)
 	}
 
 	subgroupsBody, err := io.ReadAll(subgroupsResp.Body)
