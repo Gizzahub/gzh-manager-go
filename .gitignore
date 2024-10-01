@@ -1,10 +1,23 @@
 # ide
 .idea/
 
+# dev
+.env
+
 # build
 build/
 /gzh-manager
 /gzh
+
+# test
+tmp/
+~tmp/
+~/
+tmpconf/
+*-test.yaml
+*-test.yml
+*-test.json
+
 
 # dependencies
 node_modules/
