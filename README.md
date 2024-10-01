@@ -1,7 +1,9 @@
-# gzh-manager-go
+# gzh-manager
 
-<div align="center">
-A general purpose project template for golang CLI applications
+종합 CLI 툴
+
+<div style="text-align: center;">
+A general purpose project for easy dev.
 <br>
 <br>
 This template serves as a starting point for golang commandline applications it is based on golang projects that I consider high quality and various other useful blog posts that helped me understanding golang better.
@@ -64,12 +66,12 @@ $> gzh-manager -h
 golang-cli cli application by managing gzh-manager
 
 Usage:
-  gzh-manager [flags]
-  gzh-manager [command]
+  gzh [flags]
+  gzh [command]
 
 Available Commands:
   completion  Generate the autocompletion script for the specified shell
-  example     example subcommand which adds or multiplies two given integers
+  setclone    세트로클론 한다는 뜻의 순수한 지구말입니다
   help        Help about any command
   version     gzh-manager version
 
@@ -79,12 +81,16 @@ Flags:
 Use "gzh-manager [command] --help" for more information about a command.
 ```
 
-```sh
-$> gzh-manager example 2 5 --add
-7
+먼저.. .원하는 경로에 설정파일 만들기. 참고
+[setclone.yaml](pkg/setclone/setclone.yaml)
 
-$> gzh-manager example 2 5 --multiply
-10
+```sh
+$> gzh setclone -t $HOME/mywork
+
+이건... 안됨
+$> gzh setclone -t ./mywork
+$> gzh setclone -t $HOME/mywork
+$> gzh setclone -t ~/mywork
 ```
 
 # Makefile Targets
@@ -106,3 +112,7 @@ test                           display test coverage
 
 # Contribute
 If you find issues in that setup or have some nice features / improvements, I would welcome an issue or a PR :)
+
+# 기록용
+템플릿을 .. `https://github.com/FalcoSuessgott/golang-cli-template`를 썼는데....  `https://github.com/create-go-app/cli`가 더 좋은듯? 심플해서..
+뭔가 복잡해졌다. 

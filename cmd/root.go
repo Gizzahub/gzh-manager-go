@@ -16,9 +16,7 @@ func newRootCmd(version string) *cobra.Command {
 	}
 
 	cmd.AddCommand(newVersionCmd(version)) // version subcommand
-	cmd.AddCommand(newExampleCmd())        // example subcommand
-	//cmd.AddCommand(newGithubOrgCmd())      // github subcommand
-	cmd.AddCommand(newSetcloneCmd()) // setclone subcommand
+	cmd.AddCommand(newSetcloneCmd())       // setclone subcommand
 
 	return cmd
 }
