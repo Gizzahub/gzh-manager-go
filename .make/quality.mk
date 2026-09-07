@@ -12,6 +12,18 @@
 # Code Formatting Targets
 # ==============================================================================
 
+# The import-formatting contract, defined once because format-check must probe
+# exactly what format-simplify and format-strict write. When these two lines
+# disagree with the gate, the gate stops measuring the tool -- which is how three
+# MockGen files came to be rewritten on every run with nothing reporting it.
+#
+# gci owns local-prefix grouping, and only gci: it is the one of the two that
+# honours --skip-generated, in write and in diff alike. goimports has no such
+# flag, so giving it -local made it rewrite generated files that gci had
+# deliberately left alone, in a mode no probe was running.
+GOIMPORTS_FLAGS :=
+GCI_SECTIONS := -s standard -s default -s "prefix(github.com/gizzahub/gzh-cli)"
+
 format: format-simplify ## quick and simple formatting (default)
 fmt: format-simplify
 
@@ -20,8 +32,10 @@ format-simplify: format-install-tools ## quick basic formatting with gofumpt, go
 	@echo "1. Running gofumpt (includes go fmt + simplification)..."
 	@"$(GOFUMPT)" -w .
 	@echo "2. Organizing imports..."
-	@"$(GOIMPORTS)" -w -local github.com/gizzahub/gzh-cli .
-	@echo "3. Formatting markdown files..."
+	@"$(GOIMPORTS)" -w $(GOIMPORTS_FLAGS) .
+	@echo "3. Grouping imports..."
+	@"$(GCI)" write --skip-generated $(GCI_SECTIONS) .
+	@echo "4. Formatting markdown files..."
 	@find . -name "*.md" -type f -not -path "./vendor/*" -not -path "./.git/*" -not -path "./bin/*" | xargs -r "$(MDFORMAT)" || true
 	@echo -e "$(GREEN)✅ Quick formatting complete!$(RESET)"
 
@@ -64,8 +78,15 @@ format-md-check: install-mdformat ## check markdown files that need formatting
 #
 # Non-mutating on purpose. `fmt` and `format-strict` rewrite the tree, which is
 # the wrong thing for a gate to do to a working copy it is only supposed to
-# judge. It checks with the same two pinned tools format-strict applies, in the
-# same modes, so what it verifies is exactly what `make format-strict` produces.
+# judge. It checks with the same pinned tools format-strict applies, in the same
+# modes, so what it verifies is exactly what `make format-strict` produces.
+#
+# One probe per writer, sharing the writers' own flag variables. The
+# correspondence is the point: format-strict ran three writers and this gate
+# measured two, so goimports rewrote three MockGen files on every run and no
+# probe said a word. Adding a writer without its probe recreates that hole, and
+# hardcoding a flag here instead of reusing GOIMPORTS_FLAGS / GCI_SECTIONS lets
+# the probe drift out of the mode it is supposed to be measuring.
 format-check: format-install-tools ## fail if Go files are not formatted (non-mutating)
 	@echo -e "$(CYAN)📋 Checking Go formatting...$(RESET)"
 	@unformatted="$$("$(GOFUMPT)" -l -extra .)"; \
@@ -75,10 +96,17 @@ format-check: format-install-tools ## fail if Go files are not formatted (non-mu
 		echo "   Run: make format-strict"; \
 		exit 1; \
 	fi
-	@imports="$$("$(GCI)" diff --skip-generated -s standard -s default -s "prefix(github.com/gizzahub/gzh-cli)" .)"; \
+	@imports="$$("$(GCI)" diff --skip-generated $(GCI_SECTIONS) .)"; \
 	if [ -n "$$imports" ]; then \
 		echo -e "$(RED)❌ gci: import grouping not normalized:$(RESET)"; \
 		printf '%s\n' "$$imports"; \
+		echo "   Run: make format-strict"; \
+		exit 1; \
+	fi
+	@stale="$$("$(GOIMPORTS)" -l $(GOIMPORTS_FLAGS) .)"; \
+	if [ -n "$$stale" ]; then \
+		echo -e "$(RED)❌ goimports: imports not organized:$(RESET)"; \
+		printf '%s\n' "$$stale"; \
 		echo "   Run: make format-strict"; \
 		exit 1; \
 	fi
@@ -103,9 +131,9 @@ format-strict: format-install-tools ## comprehensive formatting with all tools
 	@echo "2. Running gci (import organization)..."
 	@"$(GCI)" write --skip-generated .
 	@echo "3. Organizing imports with goimports..."
-	@"$(GOIMPORTS)" -w -local github.com/gizzahub/gzh-cli .
+	@"$(GOIMPORTS)" -w $(GOIMPORTS_FLAGS) .
 	@echo "4. Final gci (import grouping)..."
-	@"$(GCI)" write --skip-generated -s standard -s default -s "prefix(github.com/gizzahub/gzh-cli)" .
+	@"$(GCI)" write --skip-generated $(GCI_SECTIONS) .
 	@echo -e "$(GREEN)✅ Strict formatting complete!$(RESET)"
 
 format-list: ## show files that need formatting
