@@ -21,6 +21,12 @@
 # honours --skip-generated, in write and in diff alike. goimports has no such
 # flag, so giving it -local made it rewrite generated files that gci had
 # deliberately left alone, in a mode no probe was running.
+#
+# Every writer in this file uses these two variables -- the whole-tree pair
+# (format-simplify, format-strict) and the incremental pair (format-file,
+# fmt-diff) alike. An incremental target that formats in a different mode than
+# the gate is the same defect wearing a smaller scope: `make fmt-diff` would
+# hand back files that `make format-check` then rejects.
 GOIMPORTS_FLAGS :=
 GCI_SECTIONS := -s standard -s default -s "prefix(github.com/gizzahub/gzh-cli)"
 
@@ -128,11 +134,9 @@ format-strict: format-install-tools ## comprehensive formatting with all tools
 	@echo -e "$(CYAN)🔧 Strict formatting (all tools)...$(RESET)"
 	@echo "1. Running gofumpt (strict formatting + simplification)..."
 	@"$(GOFUMPT)" -w -extra .
-	@echo "2. Running gci (import organization)..."
-	@"$(GCI)" write --skip-generated .
-	@echo "3. Organizing imports with goimports..."
+	@echo "2. Organizing imports with goimports..."
 	@"$(GOIMPORTS)" -w $(GOIMPORTS_FLAGS) .
-	@echo "4. Final gci (import grouping)..."
+	@echo "3. Grouping imports with gci..."
 	@"$(GCI)" write --skip-generated $(GCI_SECTIONS) .
 	@echo -e "$(GREEN)✅ Strict formatting complete!$(RESET)"
 
@@ -182,7 +186,9 @@ format-file: format-install-tools ## format specific files with gofumpt and goim
 			echo "  1. Running gofumpt..."; \
 			"$(GOFUMPT)" -w "$$file" || echo -e "$(RED)❌ gofumpt failed for $$file$(RESET)"; \
 			echo "  2. Running goimports..."; \
-			"$(GOIMPORTS)" -w -local github.com/gizzahub/gzh-cli "$$file" || echo -e "$(RED)❌ goimports failed for $$file$(RESET)"; \
+			"$(GOIMPORTS)" -w $(GOIMPORTS_FLAGS) "$$file" || echo -e "$(RED)❌ goimports failed for $$file$(RESET)"; \
+			echo "  3. Running gci..."; \
+			"$(GCI)" write --skip-generated $(GCI_SECTIONS) "$$file" >/dev/null || echo -e "$(RED)❌ gci failed for $$file$(RESET)"; \
 			echo -e "$(GREEN)✅ File '$$file' formatted successfully!$(RESET)"; \
 		fi; \
 	done
@@ -196,7 +202,8 @@ fmt-diff: format-install-tools ## format only changed files (fast, for pre-commi
 			if [ -f "$$file" ]; then \
 				echo -e "$(CYAN)📝 Formatting: $$file$(RESET)"; \
 				"$(GOFUMPT)" -w "$$file" || echo -e "$(RED)❌ gofumpt failed for $$file$(RESET)"; \
-				"$(GOIMPORTS)" -w -local github.com/gizzahub/gzh-cli "$$file" || echo -e "$(RED)❌ goimports failed for $$file$(RESET)"; \
+				"$(GOIMPORTS)" -w $(GOIMPORTS_FLAGS) "$$file" || echo -e "$(RED)❌ goimports failed for $$file$(RESET)"; \
+				"$(GCI)" write --skip-generated $(GCI_SECTIONS) "$$file" >/dev/null || echo -e "$(RED)❌ gci failed for $$file$(RESET)"; \
 			fi; \
 		done; \
 		echo -e "$(GREEN)✅ Changed files formatted!$(RESET)"; \
