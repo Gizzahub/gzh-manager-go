@@ -151,10 +151,26 @@ COSIGN_FOUND = $$(go version -m "$(COSIGN)" 2>/dev/null | awk '$$1 == "mod" && $
 .PHONY: install-syft install-cosign install-release-tools verify-release-tools
 .PHONY: verify-release-pins
 
-install-tools: install-format-tools install-analysis-tools install-golangci-lint install-release-tools ## install all development tools
+install-tools: install-format-tools install-mdformat install-analysis-tools install-golangci-lint install-release-tools ## install all development tools
 	@echo -e "$(GREEN)✅ All development tools installed!$(RESET)"
 
-install-format-tools: install-gofumpt install-gci install-goimports install-mdformat ## install the exact pinned formatting toolchain
+# mdformat is deliberately not a prerequisite here, even though it is a formatter.
+#
+# `format-strict` is the only thing CI's "Format check" step runs, and it depends
+# on this target and then invokes gofumpt, gci and goimports. It never invokes
+# mdformat. Listing mdformat here made every consumer of the Go formatting
+# toolchain install a Python tool it does not call, which was merely wasteful
+# until install-mdformat began requiring uv (TASK-169). The hosted runner has no
+# uv, so that unused install became a hard failure: Format check died, and Lint
+# check and Security scan never ran behind it.
+#
+# The markdown gate loses nothing by this, because CI has never checked markdown.
+# TASK-169 wired format-md-check into `make check`, the local pre-commit gate, and
+# the three markdown targets (format-md, format-md-check, format-md-diff) each
+# name install-mdformat as their own prerequisite. Separating the two answers
+# "which tools does this install" and "which checks does this run" independently;
+# coupling them made the second question's answer depend on the first's.
+install-format-tools: install-gofumpt install-gci install-goimports ## install the exact pinned Go formatting toolchain
 	@echo -e "$(GREEN)✅ All formatting tools installed!$(RESET)"
 
 install-gofumpt: ## install the pinned gofumpt release
