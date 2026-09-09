@@ -105,6 +105,10 @@ jobs:
         run: goreleaser release --snapshot --clean --skip=publish,docker,sign
 
   release:
+    # Publishing is allowed only for the tag-push trigger. Keep this guard on
+    # the privileged job so adding another workflow trigger cannot expose its
+    # write permissions, OIDC token, or publishing credentials.
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     permissions:
       contents: write # create the GitHub Release and upload artifacts
