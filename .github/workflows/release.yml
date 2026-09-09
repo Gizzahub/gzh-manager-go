@@ -3,6 +3,10 @@ name: Release
 on:
   push:
     tags: ["v*"]
+  # Running this from the Actions UI validates the selected branch without
+  # making a release. The validation job has read-only permissions and never
+  # receives publishing credentials.
+  workflow_dispatch:
 
 # Least privilege by default; the release job elevates only what it needs.
 permissions:
@@ -21,6 +25,85 @@ env:
   COSIGN_VERSION: v3.1.3
 
 jobs:
+  verify-release:
+    # This job is deliberately separate from `release`: GitHub job permissions
+    # are static, so a conditional publish step would still expose write and
+    # OIDC permissions to a manually dispatched run.
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: '1.26.7'
+
+      # Exact toolchain. Every version is pinned; nothing resolves to "latest".
+      - name: Install cosign ${{ env.COSIGN_VERSION }}
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6 # v4.1.2
+        with:
+          cosign-release: ${{ env.COSIGN_VERSION }}
+
+      - name: Install syft ${{ env.SYFT_VERSION }}
+        uses: anchore/sbom-action/download-syft@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2
+        with:
+          syft-version: ${{ env.SYFT_VERSION }}
+
+      - name: Install GoReleaser ${{ env.GORELEASER_VERSION }}
+        uses: goreleaser/goreleaser-action@f06c13b6b1a9625abc9e6e439d9c05a8f2190e94 # v7.2.3
+        with:
+          distribution: goreleaser
+          version: ${{ env.GORELEASER_VERSION }}
+          install-only: true
+
+      - name: Preflight — release toolchain
+        run: |
+          set -euo pipefail
+          fail() {
+            echo "::error title=Release toolchain mismatch::$1"
+            echo "TOOLCHAIN FAILURE: $1" >&2
+            exit 1
+          }
+
+          command -v goreleaser >/dev/null 2>&1 || fail "goreleaser is not on PATH"
+          command -v syft >/dev/null 2>&1 || fail "syft is not on PATH (SBOM generation would be skipped)"
+          command -v cosign >/dev/null 2>&1 || fail "cosign is not on PATH (artifact signing would be skipped)"
+
+          got_goreleaser="$(goreleaser --version | awk '/^GitVersion:/ { print $2 }' || true)"
+          got_syft="$(syft version -o json | jq -r '.version' || true)"
+          got_cosign="$(cosign version --json | jq -r '.gitVersion' || true)"
+
+          echo "goreleaser: ${got_goreleaser:-<unparsed>} (want ${GORELEASER_VERSION})"
+          echo "syft:       ${got_syft:-<unparsed>} (want ${SYFT_VERSION})"
+          echo "cosign:     ${got_cosign:-<unparsed>} (want ${COSIGN_VERSION})"
+
+          norm() { printf '%s' "${1#v}"; }
+          check_version() { # <tool> <found> <want>
+            case "${2:-}" in
+              "" | null | "[not provided]")
+                fail "could not read the $1 version from its own output (got '${2:-}')" ;;
+            esac
+            [ "$(norm "$2")" = "$(norm "$3")" ] || fail "$1 is $2, want $3"
+          }
+
+          check_version goreleaser "${got_goreleaser}" "${GORELEASER_VERSION}"
+          check_version syft       "${got_syft}"       "${SYFT_VERSION}"
+          check_version cosign     "${got_cosign}"     "${COSIGN_VERSION}"
+
+          goreleaser check || fail "goreleaser check rejected .goreleaser.yml (deprecated or invalid keys — see above)"
+          goreleaser healthcheck || fail "goreleaser healthcheck reported a missing dependency (see above)"
+
+      - name: Validate non-publishing snapshot
+        # Snapshot artifacts stay on the ephemeral hosted runner. Publishing,
+        # Docker pushes, and signing are explicitly disabled.
+        run: goreleaser release --snapshot --clean --skip=publish,docker,sign
+
   release:
     runs-on: ubuntu-latest
     permissions:
