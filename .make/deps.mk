@@ -100,7 +100,6 @@ deps-update-actions: ## check and show GitHub Actions that need updates
 		echo "  → actions/checkout@v4"; \
 		echo "  → actions/setup-go@v5"; \
 		echo "  → actions/cache@v4"; \
-		echo "  → codecov/codecov-action@v4"; \
 	else \
 		echo -e "$(GREEN)✅ No GitHub Actions found$(RESET)"; \
 	fi

@@ -5,7 +5,6 @@
 ![Test Status](https://github.com/gizzahub/gzh-cli/actions/workflows/test.yml/badge.svg)
 ![Lint Status](https://github.com/gizzahub/gzh-cli/actions/workflows/lint.yml/badge.svg)
 ![GoDoc](https://pkg.go.dev/badge/github.com/gizzahub/gzh-cli.svg)
-![Code Coverage](https://codecov.io/gh/Gizzahub/gzh-cli/branch/main/graph/badge.svg)
 ![Latest Release](https://img.shields.io/github/v/release/Gizzahub/gzh-cli)
 
 ______________________________________________________________________

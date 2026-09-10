@@ -11,7 +11,6 @@ on:
       - '.golangci.yml'
       - '.gosec.json'
       - '.make/**'
-      - 'codecov.yml'
       - '.github/workflows/main.yml'
       - 'cmd/**/AGENTS.md'
       - 'cmd/AGENTS_COMMON.md'
@@ -31,7 +30,6 @@ on:
       - '.golangci.yml'
       - '.gosec.json'
       - '.make/**'
-      - 'codecov.yml'
       - '.github/workflows/main.yml'
       - 'cmd/**/AGENTS.md'
       - 'cmd/AGENTS_COMMON.md'
@@ -101,14 +99,6 @@ jobs:
         shell: bash
         run: |
           go test -race "-coverprofile=coverage-${{ matrix.os }}.out" -covermode=atomic ./...
-
-      - name: Upload coverage (Ubuntu only)
-        if: matrix.os == 'ubuntu-latest'
-        uses: codecov/codecov-action@v6
-        with:
-          files: ./coverage-ubuntu-latest.out
-          flags: unittests
-          fail_ci_if_error: false
 
       - name: Upload coverage artifacts
         if: matrix.os == 'ubuntu-latest'
